@@ -1,4 +1,4 @@
-# Folio: selection-wheel portfolio
+# Portfolio: selection-wheel portfolio
 
 A personal portfolio whose navigation is a radial selection wheel: a smoked-glass ring over a
 blurred night skyline, angle-based selection, drill-down rings per category, and a detail panel.
@@ -30,23 +30,6 @@ Requires Node 22.18+ (scripts are TypeScript run natively by Node; 24 recommende
 | `npm run notion:setup` | One-time: creates and seeds the Notion databases |
 
 Content resolution: `src/content/content.json` if present, otherwise `src/content/content.seed.json`.
-
-## Deploy to GitHub Pages
-
-1. Create a GitHub repo and push:
-   ```sh
-   git init -b main
-   git add .
-   git commit -m "Initial portfolio"
-   git remote add origin https://github.com/sk394/<repo>.git
-   git push -u origin main
-   ```
-   - Repo named **`sk394.github.io`** → site at `https://sk394.github.io/`
-   - Any other name (e.g. `folio`) → `https://sk394.github.io/folio/`. The base path is detected automatically.
-2. In the repo: **Settings → Pages → Build and deployment → Source: GitHub Actions**.
-3. The push triggers **Deploy to GitHub Pages** (`.github/workflows/deploy.yml`). Done.
-
-The site works right away from the seed content. Notion is optional and can be added any time.
 
 ## Notion as the CMS
 
