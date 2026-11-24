@@ -1,4 +1,4 @@
-// One-time setup: creates the Profile / Categories / Items databases under your Notion page
+// One-time setup: creates the Profile / Categories / Items / Blog databases under your Notion page
 // and fills them from the current content (content.json, else content.seed.json).
 // Safe to re-run: databases that already exist are left alone (and not re-seeded).
 //
@@ -44,9 +44,16 @@ const SCHEMAS: Record<Table, Record<string, unknown>> = {
     "Meter Label": { rich_text: {} }, "Meter Value": { number: { format: "percent" } },
     Order: { number: {} }, Visible: { checkbox: {} },
   },
+  // One row per post; the row's page body is the article.
+  Blog: {
+    Title: { title: {} }, Category: { select: {} }, Published: { checkbox: {} }, Date: { date: {} },
+    Summary: { rich_text: {} }, Tags: { multi_select: {} }, "Short Label": { rich_text: {} },
+    Icon: { select: opts(iconNames) }, ID: { rich_text: {} },
+  },
 };
 
 function rows(t: Table): Record<string, unknown>[] {
+  if (t === "Blog") return []; // posts are written in Notion
   if (t === "Profile") {
     return Object.entries(content.profile).filter(([, v]) => v).map(([k, v]) => ({ Key: title(k), Value: text(String(v)) }));
   }

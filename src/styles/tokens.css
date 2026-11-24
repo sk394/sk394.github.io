@@ -80,6 +80,11 @@ kbd {
   .coarse-only { display: inline; }
 }
 
+/* Crossfade between the wheel and a blog post. */
+@media (prefers-reduced-motion: no-preference) {
+  @view-transition { navigation: auto; }
+}
+
 /* ---- view modes ----------------------------------------------------------------
    no-js        → plain résumé only
    js + wheel   → wheel app (the résumé stays in the HTML for crawlers)
@@ -101,7 +106,7 @@ kbd {
   letter-spacing: 0.12em; text-transform: uppercase;
   opacity: 0; transition: opacity 0.3s;
 }
-.wheel-open .brand, [data-view="plain"] .brand { opacity: 0.85; }
+.wheel-open .brand, [data-view="plain"] .brand, [data-view="post"] .brand { opacity: 0.85; }
 .tools { display: flex; gap: 8px; margin-left: auto; }
 .tool {
   display: inline-flex; align-items: center; gap: 8px;

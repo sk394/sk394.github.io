@@ -113,10 +113,18 @@ function hover(i: number, src: Source) {
     el.live.textContent = view.wedges[i].label;
   }
   if (src === "key" || src === "pad") ring.labels[i]?.focus({ preventScroll: true });
-  // Preload the logos of a category the visitor is lingering on.
+  // Preload what the visitor is lingering on: a category's logos, or the post itself.
   clearTimeout(preloadTimer);
   const node = view.wedges[i];
+  if (node.kind === "post") preloadTimer = window.setTimeout(() => prefetch(asset(node.href!)), 150);
   if (node.children) preloadTimer = window.setTimeout(() => node.children!.forEach((c) => { if (c.logo) new Image().src = asset(c.logo); }), 150);
+}
+
+const prefetched = new Set<string>();
+function prefetch(href: string) {
+  if (prefetched.has(href)) return;
+  prefetched.add(href);
+  document.head.append(Object.assign(document.createElement("link"), { rel: "prefetch", href }));
 }
 
 function confirm(i: number, src: Source) {
@@ -132,6 +140,9 @@ function confirm(i: number, src: Source) {
     case "about":
       if (view.selected === node) return;
       router.go({ path: [...base, node.id], page: view.route.page }, !!view.selected);
+      break;
+    case "post":
+      location.href = asset(node.href!);
       break;
     case "more":
       page(1);

@@ -55,14 +55,33 @@ export const ProfileSchema = z.object({
   resumePdf: z.string().optional(),
 });
 
+/** A published blog post. `html` is the rendered Notion page body; root-relative URLs start with {{BASE}}. */
+export const PostSchema = z.object({
+  id: z.string().regex(/^[a-z0-9-]+$/, "lowercase slug (a-z, 0-9, -)"),
+  title: z.string().min(1),
+  category: z.string().min(1),
+  categoryId: z.string().regex(/^[a-z0-9-]+$/, "lowercase slug (a-z, 0-9, -)"),
+  shortLabel: z.string().max(14).optional(),
+  icon: z.string().optional(),
+  summary: z.string().optional(),
+  date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "pick a date"),
+  tags: z.array(z.string()),
+  html: z.string(),
+  minutes: z.number().int().min(1),
+  cover: z.object({ src: z.string(), width: z.number(), height: z.number() }).optional(),
+  og: z.string().optional(),
+});
+
 export const ContentSchema = z.object({
   profile: ProfileSchema,
   categories: z.array(CategorySchema),
   items: z.array(ItemSchema),
+  posts: z.array(PostSchema).default([]),
 });
 
 export type Category = z.infer<typeof CategorySchema>;
 export type Item = z.infer<typeof ItemSchema>;
+export type Post = z.infer<typeof PostSchema>;
 export type Profile = z.infer<typeof ProfileSchema>;
 export type Content = z.infer<typeof ContentSchema>;
 

@@ -10,6 +10,8 @@ export default defineConfig({
   site,
   base,
   output: "static",
+  // Blog posts live at /blog/<slug>/; the list of them is the wheel.
+  redirects: { "/blog": `${base.replace(/\/$/, "")}/#/blog` },
   build: { inlineStylesheets: "always", assets: "_assets" },
   compressHTML: true,
   devToolbar: { enabled: false },

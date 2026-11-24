@@ -1,0 +1,13 @@
+---
+import condUrl from "@fontsource/barlow-condensed/files/barlow-condensed-latin-600-normal.woff2?url";
+import bodyUrl from "@fontsource/barlow/files/barlow-latin-400-normal.woff2?url";
+import bodyBoldUrl from "@fontsource/barlow/files/barlow-latin-600-normal.woff2?url";
+
+const css = `
+@font-face{font-family:"Barlow Condensed";font-style:normal;font-weight:600;font-display:swap;src:url(${condUrl}) format("woff2")}
+@font-face{font-family:"Barlow";font-style:normal;font-weight:400;font-display:swap;src:url(${bodyUrl}) format("woff2")}
+@font-face{font-family:"Barlow";font-style:normal;font-weight:600;font-display:swap;src:url(${bodyBoldUrl}) format("woff2")}`;
+---
+<link rel="preload" href={condUrl} as="font" type="font/woff2" crossorigin />
+<link rel="preload" href={bodyUrl} as="font" type="font/woff2" crossorigin />
+<style is:inline set:html={css}></style>

@@ -16,7 +16,8 @@
     { "id": "extracurricular", "label": "Extracurricular", "shortLabel": "Activities", "icon": "trophy", "order": 5, "visible": true },
     { "id": "certifications", "label": "Certifications", "shortLabel": "Certs", "icon": "badge", "order": 6, "visible": true },
     { "id": "contact", "label": "Contact", "icon": "envelope", "order": 7, "visible": true },
-    { "id": "about", "label": "About", "icon": "user", "order": 8, "visible": true }
+    { "id": "about", "label": "About", "icon": "user", "order": 8, "visible": true },
+    { "id": "blog", "label": "Blog", "icon": "pen", "order": 9, "visible": true }
   ],
   "items": [
     {

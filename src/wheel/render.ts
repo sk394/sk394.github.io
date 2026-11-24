@@ -1,6 +1,7 @@
 // SVG + HTML overlay DOM for rings and the center hub.
 import { buildRing, type Wedge } from "./geometry.ts";
 import { icon } from "../icons/index.ts";
+import { clip } from "./text.ts";
 import type { WheelNode } from "./types.ts";
 
 export const INNER = 0.38;
@@ -31,6 +32,7 @@ export function createRing(nodes: WheelNode[], R: number, label: string, depth: 
   el.className = "ring";
   el.dataset.count = String(n);
   el.dataset.depth = String(depth);
+  if (nodes.some((x) => x.kind === "post" || x.short.length > 14)) el.dataset.wrap = "";
   el.setAttribute("role", "menu");
   el.setAttribute("aria-label", label);
   el.setAttribute("aria-orientation", "horizontal");
@@ -68,7 +70,7 @@ export function createRing(nodes: WheelNode[], R: number, label: string, depth: 
     d.setAttribute("aria-label", node.kind === "more" ? `More, ${node.sub}` : `${node.label}${node.sub ? ", " + node.sub : ""}`);
     if (node.children?.length) d.setAttribute("aria-haspopup", "menu");
     d.style.transform = `translate(${w.cx}px, ${w.cy}px)`;
-    d.innerHTML = `<div class="wl-in">${mark(node)}<span class="wl-t">${esc(n <= 3 ? node.label : node.short)}</span></div>`;
+    d.innerHTML = `<div class="wl-in">${mark(node)}<span class="wl-t">${esc(n <= 3 ? clip(node.label, 60) : node.short)}</span></div>`;
     el.append(d);
     return d;
   });
@@ -135,10 +137,12 @@ export function hubRefs(el: HTMLButtonElement): Hub {
 
 export function setHub(h: Hub, node: WheelNode | undefined, i: number, total: number, fallback: WheelNode, depth: number) {
   const n = node ?? fallback;
-  const title = n.kind === "item" ? n.short : n.label;
+  const small = h.el.offsetWidth < 160;
+  const title = n.kind === "item" ? n.short : clip(n.label, small ? 40 : 64);
   h.title.textContent = title;
   h.title.classList.toggle("long", title.length > 11);
-  h.sub.textContent = n.sub ?? "";
+  h.title.classList.toggle("xlong", title.length > 26);
+  h.sub.textContent = clip(n.sub ?? "", small ? 30 : 52);
   const m = meterFor(node, i, total);
   h.fill.style.transform = `scaleX(${m.value})`;
   h.mlabel.textContent = m.label;

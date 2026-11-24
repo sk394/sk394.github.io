@@ -7,3 +7,5 @@ dist/
 *.log
 public/content-version.txt
 !.env.example
+DESIGN.md
+README.md

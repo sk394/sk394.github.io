@@ -1,4 +1,4 @@
-// Level stack + History API routing. URL shape: #/<category>[/<item>][?page=N]
+// Level stack + History API routing. URL shape: #/<category>[/<subcategory>][/<item>][?page=N]
 import type { WheelNode } from "./types.ts";
 
 export const MAX_WEDGES = 8;
@@ -49,7 +49,7 @@ export function resolve(root: WheelNode, r: Route): View {
   let depth = 0;
   for (const id of r.path) {
     const child = ring.children?.find((c) => c.id === id);
-    if (!child) break;
+    if (!child || child.kind === "post") break; // posts are pages of their own, not wheel states
     path.push(id);
     if (child.children?.length && child.kind === "group") {
       ring = child;

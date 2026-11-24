@@ -1,6 +1,6 @@
 // Minimal Notion API client (no SDK) + the mapping between Notion rows and the content schema.
 // Uses API version 2025-09-03 (databases contain data sources; rows are queried per data source).
-import type { Category, Item, Profile } from "../src/content/schema.ts";
+import type { Category, Item, Post, Profile } from "../src/content/schema.ts";
 
 const API = "https://api.notion.com/v1";
 const VERSION = "2025-09-03";
@@ -30,11 +30,13 @@ export async function api<T = any>(token: string, path: string, method = "GET", 
   }
 }
 
-export const TABLES = ["Profile", "Categories", "Items"] as const;
+const REQUIRED = ["Profile", "Categories", "Items"] as const;
+export const TABLES = [...REQUIRED, "Blog"] as const;
 export type Table = (typeof TABLES)[number];
+export type Sources = Record<(typeof REQUIRED)[number], string> & { Blog?: string };
 
-/** Finds the three databases (by title) directly under the portfolio page; returns their data source ids. */
-export async function findSources(token: string, page: string): Promise<Record<Table, string>> {
+/** Finds the databases (by title) directly under the portfolio page; returns their data source ids. Blog is optional. */
+export async function findSources(token: string, page: string): Promise<Sources> {
   const found: Partial<Record<Table, string>> = {};
   let cursor: string | undefined;
   do {
@@ -49,11 +51,11 @@ export async function findSources(token: string, page: string): Promise<Record<T
     }
     cursor = r.has_more ? r.next_cursor : undefined;
   } while (cursor);
-  const missing = TABLES.filter((t) => !found[t]);
+  const missing = REQUIRED.filter((t) => !found[t]);
   if (missing.length) {
     throw new Error(`Notion page is missing database(s): ${missing.join(", ")}. Run "npm run notion:setup" or share the page with your integration.`);
   }
-  return found as Record<Table, string>;
+  return found as Sources;
 }
 
 export async function queryAll(token: string, source: string): Promise<any[]> {
@@ -155,6 +157,48 @@ export function toItem(row: any): Item & { _logoFile?: string } {
     visible: prop(p, "Visible") ?? true,
     _logoFile: Array.isArray(files) ? files[0]?.url : files,
   };
+}
+
+export const POST_COLUMNS: Record<string, string> = {
+  title: "Title", id: "ID", category: "Category", categoryId: "Category", shortLabel: "Short Label", icon: "Icon",
+  summary: "Summary", date: "Date", tags: "Tags",
+};
+
+/** Slug for blog titles and categories; keeps names like "C#" and "C++" apart. */
+const blogSlug = (s: string) => slug(s.replace(/#/g, " sharp").replace(/\+/g, " plus"));
+
+export type PostRow = { post: Post; pageId: string; edited: string; coverUrl?: string };
+
+/** Metadata of one published Blog row (its page body is fetched separately); null for drafts. */
+export function toPost(row: any): PostRow | null {
+  const p = row.properties;
+  if (prop(p, "Published") !== true) return null;
+  const title = prop(p, "Title") ?? "";
+  const category = prop(p, "Category") ?? "General";
+  return {
+    pageId: row.id,
+    edited: row.last_edited_time,
+    coverUrl: row.cover?.file?.url ?? row.cover?.external?.url,
+    post: {
+      id: prop(p, "ID") ?? blogSlug(title),
+      title,
+      category,
+      categoryId: blogSlug(category),
+      shortLabel: prop(p, "Short Label"),
+      icon: prop(p, "Icon"),
+      summary: prop(p, "Summary"),
+      date: String(prop(p, "Date")?.start ?? row.created_time).slice(0, 10),
+      tags: prop(p, "Tags") ?? [],
+      html: "",
+      minutes: 1,
+    },
+  };
+}
+
+/** Option names of a select column, in the order they are arranged in Notion. */
+export async function selectOptions(token: string, source: string, column: string): Promise<string[]> {
+  const ds = await api(token, `/data_sources/${source}`);
+  return (ds.properties?.[column]?.select?.options ?? []).map((o: any) => o.name);
 }
 
 export function toProfile(rows: any[]): Profile {

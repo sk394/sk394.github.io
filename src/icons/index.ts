@@ -13,6 +13,7 @@ const P: Record<string, string> = {
   wrench: '<path d="M14.7 6.3a4 4 0 0 0 5 5L20.5 12A5.5 5.5 0 0 1 13.4 13.6L6.6 20.4a2 2 0 0 1-2.9-2.9l6.8-6.8A5.5 5.5 0 0 1 12 3.5z"/>',
   linkedin: '<rect x="3" y="3" width="18" height="18" rx="3"/><path d="M8 10.5V17M8 7.2v.1M12 17v-6.5M12 13.5a2.5 2.5 0 0 1 5 0V17"/>',
   github: '<circle cx="6" cy="5" r="2"/><circle cx="6" cy="19" r="2"/><circle cx="18" cy="7" r="2"/><path d="M6 7v10M18 9c0 5-6 4-11.5 8"/>',
+  pen: '<path d="M4 20l1-4.5L16.5 4a2 2 0 0 1 3 0l.5.5a2 2 0 0 1 0 3L8.5 19zM14 6.5l3.5 3.5M12 20h8"/>',
   document: '<path d="M6 3h8l4 4v14H6zM14 3v4h4M9 12h6M9 16h6"/>',
   phone: '<path d="M5 4h3.5l2 5-2.5 1.5a11 11 0 0 0 5.5 5.5l1.5-2.5 5 2V19a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z"/>',
   more: '<circle cx="5" cy="12" r="1.2"/><circle cx="12" cy="12" r="1.2"/><path d="M17 8l4 4-4 4"/>',

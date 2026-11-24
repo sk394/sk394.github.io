@@ -60,7 +60,8 @@ The site works right away from the seed content. Notion is optional and can be a
    cp .env.example .env      # fill in NOTION_TOKEN and NOTION_PAGE_ID (the page URL works)
    npm run notion:setup
    ```
-   This creates three inline databases on the page: **Profile**, **Categories** and **Items**.
+   This creates four inline databases on the page: **Profile**, **Categories**, **Items** and **Blog**.
+   Re-running it only adds the ones that are missing.
 4. **Add the same two values as GitHub secrets:** go to Settings → Secrets and variables → Actions and add `NOTION_TOKEN` and `NOTION_PAGE_ID`.
 5. Run the workflow once (Actions → Deploy → Run workflow), or just wait.
 
@@ -88,7 +89,7 @@ The site works right away from the seed content. Notion is optional and can be a
 | Column | Notes |
 |---|---|
 | Label | Wedge / section name |
-| ID | Slug used in URLs and by Items → `Category` (`experience`, `projects`, …). `about` and `contact` are special |
+| ID | Slug used in URLs and by Items → `Category` (`experience`, `projects`, …). `about`, `contact` and `blog` are special |
 | Short Label | ≤ 14 chars, used when the ring is crowded |
 | Icon | `briefcase`, `blueprint`, `chip`, `cap`, `trophy`, `badge`, `envelope`, `user`, `code`, `layers`, `wrench`, … |
 | Order / Visible | Sorting; untick to hide. Categories with no visible items are hidden automatically |
@@ -109,6 +110,27 @@ The site works right away from the seed content. Notion is optional and can be a
 | Meter Label / Meter Value | Optional hub meter (0–100%). Defaults: time in role, skill count, or position `2 / 5` |
 | Order / Visible | Sorting and hiding |
 
+**Blog**: one row per post. Open the row and write the article in its page body.
+
+| Column | Notes |
+|---|---|
+| Title | Post title |
+| Category | Each category is a wedge on the Blog ring. Type a new name to add one; drag the options to reorder them. Empty = `General` |
+| Published | Unticked rows are drafts: never fetched into the site, and editing them doesn't redeploy |
+| Date | Shown on the post; newest first. Empty = the day the row was created |
+| Summary, Tags | Optional. The summary is also the link-preview text |
+| Short Label | Wedge label (≤ 14 chars). Empty = the title, shortened |
+| Icon | Wedge icon, `document` if empty |
+| ID | URL slug: `/blog/<id>/`. Empty = made from the title, so set it to keep the URL when you rename a post |
+
+The row's page cover becomes the post's cover and link-preview image. Supported in the body: text and
+headings, lists, to-dos, toggles, quotes, callouts, code (highlighted), equations, tables, columns, tabs,
+images, video, audio, files, bookmarks, embeds (YouTube, Vimeo, Loom, CodePen, Figma, …), synced blocks,
+table of contents, and `/html` blocks (run in a sandboxed frame). Anything else is skipped with a warning
+in the build log. Files are copied to the site at build time, up to 25 MB each.
+
+The **Categories** row with the ID `blog` is the root wedge; it appears once a post is published.
+
 More than 8 items in a category automatically pages as 7 plus a **More ›** wedge.
 
 ## Controls
@@ -127,11 +149,12 @@ Sound is off by default (speaker button, top right).
 
 ```
 docs/            resume.md (source), content-questions.md (gaps to confirm)
-scripts/         fetch-content.ts, notion.ts, notion-setup.ts, fetch-logos.ts, build-assets.ts
-public/          bg/ (generated), logos/ (+ SOURCES.md), og.png, favicon.svg
+scripts/         fetch-content.ts, notion.ts, notion-blocks.ts (page → HTML), media.ts, notion-setup.ts, fetch-logos.ts, build-assets.ts
+public/          bg/ (generated), logos/ (+ SOURCES.md), media/blog/ (from Notion), og.png, favicon.svg
 src/content/     schema.ts (zod), load.ts, content.seed.json, content.json (from Notion)
 src/wheel/       geometry, state (routing), render, anim (GSAP), input, panel, sound, main
-src/styles/      tokens, wheel, panel, plain
+src/pages/       index.astro (wheel + plain view), blog/[slug].astro (a post)
+src/styles/      tokens, wheel, panel, plain, post
 .github/workflows/deploy.yml
 ```
 

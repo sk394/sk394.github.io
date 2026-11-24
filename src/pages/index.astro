@@ -1,9 +1,7 @@
 ---
-import { loadContent, buildTree, fmtRange, contactLinks } from "../content/load.ts";
+import { loadContent, buildTree, blogCategories, postUrl, fmtDay, fmtRange, contactLinks } from "../content/load.ts";
 import { icon } from "../icons/index.ts";
-import condUrl from "@fontsource/barlow-condensed/files/barlow-condensed-latin-600-normal.woff2?url";
-import bodyUrl from "@fontsource/barlow/files/barlow-latin-400-normal.woff2?url";
-import bodyBoldUrl from "@fontsource/barlow/files/barlow-latin-600-normal.woff2?url";
+import Fonts from "../components/Fonts.astro";
 import "../styles/tokens.css";
 import "../styles/wheel.css";
 import "../styles/panel.css";
@@ -20,11 +18,6 @@ const title = `${p.name} · ${p.title}`;
 const description = p.tagline;
 const links = contactLinks(content);
 const sections = tree.children!.filter((g) => g.kind === "group" && g.id !== "contact");
-
-const fontCss = `
-@font-face{font-family:"Barlow Condensed";font-style:normal;font-weight:600;font-display:swap;src:url(${condUrl}) format("woff2")}
-@font-face{font-family:"Barlow";font-style:normal;font-weight:400;font-display:swap;src:url(${bodyUrl}) format("woff2")}
-@font-face{font-family:"Barlow";font-style:normal;font-weight:600;font-display:swap;src:url(${bodyBoldUrl}) format("woff2")}`;
 
 const current = content.items.find((i) => i.categoryId === "experience" && i.end === "present" && i.visible);
 const school = content.items.find((i) => i.categoryId === "education" && i.visible);
@@ -63,10 +56,8 @@ const bg = (kind: "sharp" | "blur", ext: string) => `${u(`/bg/city-${kind}-960.$
     <meta property="og:image:height" content="630" />
     <meta name="twitter:card" content="summary_large_image" />
     <link rel="icon" href={u("/favicon.svg")} type="image/svg+xml" />
-    <link rel="preload" href={condUrl} as="font" type="font/woff2" crossorigin />
-    <link rel="preload" href={bodyUrl} as="font" type="font/woff2" crossorigin />
+    <Fonts />
     <link rel="preload" as="image" type="image/avif" imagesrcset={bg("sharp", "avif")} imagesizes="100vw" fetchpriority="high" />
-    <style is:inline set:html={fontCss}></style>
     <script is:inline>
       (function () {
         var d = document.documentElement;
@@ -172,6 +163,23 @@ const bg = (kind: "sharp" | "blur", ext: string) => `${u(`/bg/city-${kind}-960.$
         <section class="r-sec" id={`r-${g.id}`} aria-labelledby={`h-${g.id}`}>
           <h2 id={`h-${g.id}`}>{g.label}</h2>
           <p class="r-about">{g.detail?.summary}</p>
+        </section>
+      ) : g.id === "blog" ? (
+        <section class="r-sec" id="r-blog" aria-labelledby="h-blog">
+          <h2 id="h-blog">{g.label}</h2>
+          {blogCategories(content).map((c) => (
+            <div class="r-posts">
+              <h3>{c.label}</h3>
+              <ul>
+                {c.posts.map((post) => (
+                  <li>
+                    <a href={u(postUrl(post))}>{post.title}</a> <span>{fmtDay(post.date)}</span>
+                    {post.summary && <p>{post.summary}</p>}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
         </section>
       ) : (
         <section class="r-sec" id={`r-${g.id}`} aria-labelledby={`h-${g.id}`}>

@@ -10,7 +10,7 @@ export type Detail = {
   logo?: string;
 };
 
-export type NodeKind = "group" | "item" | "action" | "about" | "more";
+export type NodeKind = "group" | "item" | "post" | "action" | "about" | "more";
 
 /** One wedge (or the root). Built at compile time by src/content/load.ts. */
 export type WheelNode = {
