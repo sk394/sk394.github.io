@@ -1,0 +1,125 @@
+:root {
+  --glass: rgba(10, 10, 12, 0.55);
+  --glass-solid: rgba(10, 10, 12, 0.82);
+  --hl: #ffffff;
+  --hl-soft: rgba(255, 255, 255, 0.14);
+  --text: #f2f2f2;
+  --text-dim: rgba(242, 242, 242, 0.62);
+  --accent: #6fbf5a; /* money-green accent, used sparingly: meters, links */
+  --danger: #e05a4f;
+  --radius-wheel: min(44vmin, 360px);
+
+  --bg: #0a0a0c;
+  --font-display: "Barlow Condensed", "Arial Narrow", "Roboto Condensed", sans-serif-condensed, sans-serif;
+  --font-body: "Barlow", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --safe-t: env(safe-area-inset-top, 0px);
+  --safe-r: env(safe-area-inset-right, 0px);
+  --safe-b: env(safe-area-inset-bottom, 0px);
+  --safe-l: env(safe-area-inset-left, 0px);
+  color-scheme: dark;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 100%;
+  line-height: 1.5;
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  margin: 0;
+  min-height: 100dvh;
+  background: var(--bg);
+}
+
+button { font: inherit; color: inherit; }
+img, svg { display: block; }
+a { color: inherit; }
+
+.ico { width: 1.25em; height: 1.25em; flex: none; }
+
+:focus { outline: none; }
+:focus-visible { outline: 2px solid var(--hl); outline-offset: 3px; border-radius: 4px; }
+
+.sr-only {
+  position: absolute !important;
+  width: 1px; height: 1px;
+  margin: -1px; padding: 0; border: 0;
+  overflow: hidden; clip: rect(0 0 0 0); clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.skip {
+  position: fixed; z-index: 100; left: 12px; top: -80px;
+  padding: 10px 16px; border-radius: 8px;
+  background: var(--hl); color: #000; font-weight: 600; text-decoration: none;
+}
+.skip:focus-visible { top: calc(12px + var(--safe-t)); }
+
+kbd {
+  display: inline-block;
+  min-width: 1.6em;
+  padding: 0 0.4em;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-bottom-width: 2px;
+  border-radius: 4px;
+  font-family: var(--font-display);
+  font-size: 0.9em;
+  line-height: 1.5;
+  text-align: center;
+}
+
+.coarse-only { display: none; }
+@media (hover: none), (pointer: coarse) {
+  .fine-only { display: none !important; }
+  .coarse-only { display: inline; }
+}
+
+/* ---- view modes ----------------------------------------------------------------
+   no-js        → plain résumé only
+   js + wheel   → wheel app (the résumé stays in the HTML for crawlers)
+   js + plain   → résumé + top bar to switch back                              */
+.no-js .app, .no-js .topbar { display: none; }
+.js[data-view="wheel"] .plain { display: none; }
+.js[data-view="plain"] .app, .js[data-view="plain"] .wheel-only { display: none; }
+
+/* ---- top bar ------------------------------------------------------------------ */
+.topbar {
+  position: fixed; z-index: 40; top: 0; left: 0; right: 0;
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  padding: calc(10px + var(--safe-t)) calc(16px + var(--safe-r)) 10px calc(16px + var(--safe-l));
+  pointer-events: none;
+}
+.topbar > * { pointer-events: auto; }
+.brand {
+  font-family: var(--font-display); font-weight: 600; font-size: 18px;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  opacity: 0; transition: opacity 0.3s;
+}
+.wheel-open .brand, [data-view="plain"] .brand { opacity: 0.85; }
+.tools { display: flex; gap: 8px; margin-left: auto; }
+.tool {
+  display: inline-flex; align-items: center; gap: 8px;
+  min-width: 44px; min-height: 44px; padding: 0 12px;
+  justify-content: center;
+  border: 1px solid rgba(255, 255, 255, 0.14); border-radius: 999px;
+  background: var(--glass-solid);
+  font-family: var(--font-display); font-weight: 600; font-size: 15px;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  cursor: pointer;
+  transition: background-color 0.15s, border-color 0.15s;
+}
+.tool:hover { background: rgba(40, 40, 44, 0.9); border-color: rgba(255, 255, 255, 0.3); }
+@supports (backdrop-filter: blur(1px)) {
+  .tool { background: var(--glass); backdrop-filter: blur(12px); }
+}
+.tool .i-on, .tool.on .i-off { display: none; }
+.tool.on .i-on { display: block; }
+.tool .i-wheel, [data-view="plain"] .tool .i-list { display: none; }
+[data-view="plain"] .tool .i-wheel { display: block; }
+@media (max-width: 479px) { .tool .lbl { display: none; } }

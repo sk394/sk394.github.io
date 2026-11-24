@@ -1,0 +1,213 @@
+---
+import { loadContent, buildTree, fmtRange, contactLinks } from "../content/load.ts";
+import { icon } from "../icons/index.ts";
+import condUrl from "@fontsource/barlow-condensed/files/barlow-condensed-latin-600-normal.woff2?url";
+import bodyUrl from "@fontsource/barlow/files/barlow-latin-400-normal.woff2?url";
+import bodyBoldUrl from "@fontsource/barlow/files/barlow-latin-600-normal.woff2?url";
+import "../styles/tokens.css";
+import "../styles/wheel.css";
+import "../styles/panel.css";
+import "../styles/plain.css";
+
+const content = loadContent();
+const { profile: p } = content;
+const tree = buildTree(content);
+const base = import.meta.env.BASE_URL.replace(/\/$/, "");
+const u = (path: string) => (path.startsWith("/") ? base + path : path);
+const site = new URL(import.meta.env.BASE_URL, Astro.site).href;
+
+const title = `${p.name} · ${p.title}`;
+const description = p.tagline;
+const links = contactLinks(content);
+const sections = tree.children!.filter((g) => g.kind === "group" && g.id !== "contact");
+
+const fontCss = `
+@font-face{font-family:"Barlow Condensed";font-style:normal;font-weight:600;font-display:swap;src:url(${condUrl}) format("woff2")}
+@font-face{font-family:"Barlow";font-style:normal;font-weight:400;font-display:swap;src:url(${bodyUrl}) format("woff2")}
+@font-face{font-family:"Barlow";font-style:normal;font-weight:600;font-display:swap;src:url(${bodyBoldUrl}) format("woff2")}`;
+
+const current = content.items.find((i) => i.categoryId === "experience" && i.end === "present" && i.visible);
+const school = content.items.find((i) => i.categoryId === "education" && i.visible);
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: p.name,
+  jobTitle: p.title,
+  description: p.tagline,
+  url: site,
+  ...(p.email ? { email: `mailto:${p.email}` } : {}),
+  sameAs: [p.linkedin, p.github].filter(Boolean),
+  ...(current?.org ? { worksFor: { "@type": "Organization", name: current.org } } : {}),
+  ...(school?.org ? { alumniOf: { "@type": "CollegeOrUniversity", name: school.org } } : {}),
+  knowsAbout: content.items.filter((i) => i.categoryId === "skills").flatMap((i) => i.tags).slice(0, 30),
+};
+
+const bg = (kind: "sharp" | "blur", ext: string) => `${u(`/bg/city-${kind}-960.${ext}`)} 960w, ${u(`/bg/city-${kind}-1920.${ext}`)} 1920w`;
+---
+<!doctype html>
+<html lang="en" class="no-js" data-view="wheel">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={site} />
+    <meta name="theme-color" content="#0a0a0c" />
+    <meta name="color-scheme" content="dark" />
+    <meta property="og:type" content="profile" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={site} />
+    <meta property="og:image" content={new URL("og.png", site).href} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="icon" href={u("/favicon.svg")} type="image/svg+xml" />
+    <link rel="preload" href={condUrl} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={bodyUrl} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" as="image" type="image/avif" imagesrcset={bg("sharp", "avif")} imagesizes="100vw" fetchpriority="high" />
+    <style is:inline set:html={fontCss}></style>
+    <script is:inline>
+      (function () {
+        var d = document.documentElement;
+        d.classList.remove("no-js");
+        d.classList.add("js");
+        try { if (localStorage.getItem("folio:view") === "plain") d.dataset.view = "plain"; } catch (e) {}
+        if (location.hash && location.hash.length > 2) d.classList.add("deep-link");
+      })();
+    </script>
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+  </head>
+  <body>
+    <a class="skip" href="#resume" data-goto-plain>Skip to plain résumé</a>
+    <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+      <filter id="wedge-glow" x="-30%" y="-30%" width="160%" height="160%" color-interpolation-filters="sRGB">
+        <feGaussianBlur in="SourceGraphic" stdDeviation="9" result="b" />
+        <feColorMatrix in="b" type="matrix" values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.5 0" result="g" />
+        <feMerge><feMergeNode in="g" /><feMergeNode in="SourceGraphic" /></feMerge>
+      </filter>
+    </svg>
+
+    <header class="topbar" data-noangle>
+      <span class="brand">{p.name}</span>
+      <div class="tools">
+        <button id="sound-toggle" class="tool wheel-only" type="button" aria-pressed="false" aria-label="Enable sounds">
+          <Fragment set:html={icon("mute", "ico i-off")} /><Fragment set:html={icon("sound", "ico i-on")} />
+        </button>
+        <button id="plain-toggle" class="tool" type="button" aria-pressed="false">
+          <Fragment set:html={icon("list", "ico i-list")} /><Fragment set:html={icon("wheel", "ico i-wheel")} /><span class="lbl">Plain view</span>
+        </button>
+      </div>
+    </header>
+
+    <div class="app">
+      <div class="bg" aria-hidden="true">
+        <picture>
+          <source type="image/avif" srcset={bg("sharp", "avif")} sizes="100vw" />
+          <img class="bg-sharp" src={u("/bg/city-sharp-1920.webp")} srcset={bg("sharp", "webp")} sizes="100vw" alt="" width="1920" height="1080" fetchpriority="high" decoding="async" />
+        </picture>
+        <picture>
+          <source type="image/avif" srcset={bg("blur", "avif")} sizes="100vw" />
+          <img class="bg-blur" src={u("/bg/city-blur-1920.webp")} srcset={bg("blur", "webp")} sizes="100vw" alt="" width="1920" height="1080" decoding="async" />
+        </picture>
+        <div class="bg-shade"></div>
+      </div>
+
+      <section class="landing" aria-labelledby="landing-name">
+        <h1 id="landing-name" class="landing-name">{p.name}</h1>
+        <p class="landing-title">{p.title}</p>
+        <button id="open-wheel" class="open-btn" type="button">
+          <span class="fine-only">Hold <kbd>Tab</kbd> or click to open</span>
+          <span class="coarse-only">Tap to open</span>
+        </button>
+      </section>
+
+      <div class="stage">
+        <div class="wheel">
+          <div class="wheel-shadow" aria-hidden="true"></div>
+          <div class="rings"></div>
+          <svg class="needle" viewBox="0 0 200 200" aria-hidden="true">
+            <path d="M93.92 65.53A35 35 0 0 1 106.08 65.53" />
+          </svg>
+          <button class="hub" type="button" aria-label="Close wheel">
+            <span class="hub-inner">
+              <span class="hub-back" hidden><Fragment set:html={icon("back")} /></span>
+              <span class="hub-title">{p.name}</span>
+              <span class="hub-sub">{p.title}</span>
+              <span class="hub-meter" aria-hidden="true"><span class="hub-fill"></span></span>
+              <span class="hub-mlabel"></span>
+            </span>
+          </button>
+        </div>
+      </div>
+
+      <p class="hint fine-only" aria-hidden="true">
+        <kbd>←</kbd><kbd>→</kbd> select · <kbd>Enter</kbd> open · <kbd>Esc</kbd> back · right-click back
+      </p>
+
+      <aside class="panel" hidden data-noangle role="dialog" aria-label="Details">
+        <div class="panel-grip" aria-hidden="true"></div>
+        <button class="panel-close" type="button" aria-label="Close details"><Fragment set:html={icon("close")} /></button>
+        <div class="panel-body"></div>
+      </aside>
+
+      <div id="announce" class="sr-only" aria-live="polite"></div>
+    </div>
+
+    <main id="resume" class="plain" tabindex="-1">
+      <header class="r-head">
+        <h1 class="r-name">{p.name}</h1>
+        <p class="r-title">{p.title}</p>
+        <p class="r-tagline">{p.tagline}</p>
+        {links.length > 0 && (
+          <ul class="r-contact">
+            {links.map((l) => (
+              <li><a href={u(l.url)} rel={l.url.startsWith("http") ? "me noopener" : undefined}><Fragment set:html={icon(l.icon)} />{l.display}</a></li>
+            ))}
+          </ul>
+        )}
+      </header>
+
+      {sections.map((g) => g.kind === "about" ? (
+        <section class="r-sec" id={`r-${g.id}`} aria-labelledby={`h-${g.id}`}>
+          <h2 id={`h-${g.id}`}>{g.label}</h2>
+          <p class="r-about">{g.detail?.summary}</p>
+        </section>
+      ) : (
+        <section class="r-sec" id={`r-${g.id}`} aria-labelledby={`h-${g.id}`}>
+          <h2 id={`h-${g.id}`}>{g.label}</h2>
+          {g.children!.map((n) => {
+            const d = n.detail!;
+            const item = content.items.find((i) => i.id === n.id)!;
+            return (
+              <article class="r-item" id={`item-${n.id}`}>
+                <header class="r-item-head">
+                  <div>
+                    <h3>{d.title}</h3>
+                    {d.org && d.org !== d.title && <p class="r-org">{d.org}</p>}
+                  </div>
+                  <p class="r-when">
+                    {fmtRange(item.start, item.end) && <span>{fmtRange(item.start, item.end)}</span>}
+                    {d.location && <span>{d.location}</span>}
+                  </p>
+                </header>
+                {d.summary && <p class="r-summary">{d.summary}</p>}
+                {d.bullets.length > 0 && <ul class="r-bullets">{d.bullets.map((b) => <li>{b}</li>)}</ul>}
+                {d.tags.length > 0 && <ul class="r-tags" aria-label="Skills and tools">{d.tags.map((t) => <li>{t}</li>)}</ul>}
+                {d.links.length > 0 && <p class="r-links">{d.links.map((l) => <a href={u(l.url)}>{l.label}</a>)}</p>}
+              </article>
+            );
+          })}
+        </section>
+      ))}
+      <footer class="r-foot">
+        <p>Wheel navigation inspired by game selection wheels; not affiliated with any game or publisher.</p>
+      </footer>
+    </main>
+
+    <script type="application/json" id="wheel-data" set:html={JSON.stringify(tree).replace(/</g, String.fromCharCode(92) + "u003c")} />
+    <script>
+      import "../wheel/main.ts";
+    </script>
+  </body>
+</html>

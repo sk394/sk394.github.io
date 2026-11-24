@@ -1,0 +1,228 @@
+{
+  "profile": {
+    "name": "Suman Khadka",
+    "title": "Full Stack Software Developer",
+    "tagline": "Full stack developer and IT systems specialist building enterprise software with .NET, React and the cloud.",
+    "about": "I'm a full stack software developer and IT systems specialist at Eckinger Construction Company, where I build and maintain the internal platform behind project management, reporting and operational workflows. I studied Computer Science with a minor in Statistics at the University of Akron, and I've shipped work across .NET, Next.js, React, Python and cloud tooling, from geotechnical data portals to coding-assessment platforms.",
+    "email": "suman.khadka0913@gmail.com",
+    "linkedin": "https://www.linkedin.com/in/iamsumankd",
+    "github": "https://github.com/sk394"
+  },
+  "categories": [
+    { "id": "experience", "label": "Experience", "icon": "briefcase", "order": 1, "visible": true },
+    { "id": "projects", "label": "Projects", "icon": "blueprint", "order": 2, "visible": true },
+    { "id": "skills", "label": "Skills", "icon": "chip", "order": 3, "visible": true },
+    { "id": "education", "label": "Education", "icon": "cap", "order": 4, "visible": true },
+    { "id": "extracurricular", "label": "Extracurricular", "shortLabel": "Activities", "icon": "trophy", "order": 5, "visible": true },
+    { "id": "certifications", "label": "Certifications", "shortLabel": "Certs", "icon": "badge", "order": 6, "visible": true },
+    { "id": "contact", "label": "Contact", "icon": "envelope", "order": 7, "visible": true },
+    { "id": "about", "label": "About", "icon": "user", "order": 8, "visible": true }
+  ],
+  "items": [
+    {
+      "id": "eckinger-construction",
+      "categoryId": "experience",
+      "title": "Full Stack Software Developer and IT Systems Specialist",
+      "org": "Eckinger Construction Company",
+      "shortLabel": "Eckinger",
+      "location": "Canton, OH",
+      "start": "2026-01",
+      "end": "present",
+      "bullets": [
+        "Design and maintain backend services for the internal software platform using .NET Framework and DevExpress controls, building dynamic enterprise UI components for project management, data reporting and operational workflows.",
+        "Provide ongoing IT support and system administration for internal users, including troubleshooting hardware and software issues and optimizing workflow tools.",
+        "Collaborate with end users to gather requirements, refine feature specifications and deploy updates to internal software with minimal disruption.",
+        "Improve system stability and performance through code optimization, logging standards and environment configuration management."
+      ],
+      "tags": [".NET Framework", "DevExpress", "Backend services", "IT support", "System administration"],
+      "links": [],
+      "logoDomain": "eckinger.com",
+      "order": 1,
+      "visible": true
+    },
+    {
+      "id": "important-gifts",
+      "categoryId": "experience",
+      "title": "Computer Science Intern (volunteer)",
+      "org": "Important Gifts Inc.",
+      "shortLabel": "Imp. Gifts",
+      "location": "Florida, NY",
+      "start": "2025-10",
+      "end": "2025-12",
+      "bullets": [
+        "Contributed to website development and worked on the Shopify platform to create and customize product pages for nonprofit digital initiatives."
+      ],
+      "tags": ["Shopify", "Web development"],
+      "links": [],
+      "order": 2,
+      "visible": true
+    },
+    {
+      "id": "clearsky-it-solutions",
+      "categoryId": "experience",
+      "title": "Software Application Developer",
+      "org": "Clearsky IT Solutions Inc",
+      "shortLabel": "Clearsky",
+      "location": "Casper, Wyoming",
+      "start": "2025-07",
+      "end": "2025-10",
+      "bullets": [
+        "Completed structured training in enterprise application development, software development lifecycle processes and client-focused technology solutions."
+      ],
+      "tags": ["Enterprise applications", "SDLC"],
+      "links": [],
+      "order": 3,
+      "visible": true
+    },
+    {
+      "id": "pile-dynamics",
+      "categoryId": "experience",
+      "title": "Software Developer Co-op",
+      "org": "Pile Dynamics, Inc.",
+      "shortLabel": "Pile Dynamics",
+      "location": "Solon, OH",
+      "start": "2024-01",
+      "end": "2025-05",
+      "bullets": [
+        "Developed and debugged full-stack features for PDI's cloud data management portal, with a strong emphasis on intuitive and accessible front-end components using Next.js, Tailwind CSS and custom React hooks.",
+        "Constructed backend API endpoints in C# with .NET, ensuring scalable and secure data exchange for cloud-based geotechnical analysis.",
+        "Reduced production bugs by 25 percent through automated testing with Jest and Cypress; consistently implemented unit testing and code reviews to maintain high code quality."
+      ],
+      "tags": ["Next.js", "React", "Tailwind CSS", "C#", ".NET", "Jest", "Cypress"],
+      "links": [],
+      "logoDomain": "pile.com",
+      "order": 4,
+      "visible": true
+    },
+    {
+      "id": "exl-center",
+      "categoryId": "experience",
+      "title": "Web Content Coordinator",
+      "org": "EX[L] Center for Community Engaged Learning",
+      "shortLabel": "EX[L] Center",
+      "location": "Akron, OH",
+      "start": "2022-08",
+      "end": "2025-05",
+      "bullets": [
+        "Automated data categorization by developing a Python script to analyze and process complex datasets, boosting data processing efficiency by 40 percent.",
+        "Redesigned and updated accessible web pages using HTML, CSS and JavaScript, leading to a 20 percent increase in user engagement."
+      ],
+      "tags": ["Python", "HTML", "CSS", "JavaScript", "Accessibility"],
+      "links": [],
+      "order": 5,
+      "visible": true
+    },
+    {
+      "id": "travelmate",
+      "categoryId": "projects",
+      "title": "TravelMate",
+      "summary": "Intelligent travel matching platform (Honors Research Project).",
+      "shortLabel": "TravelMate",
+      "bullets": [
+        "Implemented a real-time bidding system with complex database querying and a PostgreSQL API layer for dynamic user interactions and transaction processing.",
+        "Developed a web platform connecting travelers with local guides through a personalized trip posting system, using a Next.js frontend and a Supabase backend with PostgreSQL."
+      ],
+      "tags": ["Next.js", "Supabase", "PostgreSQL"],
+      "links": [],
+      "order": 1,
+      "visible": true
+    },
+    {
+      "id": "zippycode",
+      "categoryId": "projects",
+      "title": "ZippyCode",
+      "summary": "Web-based coding assessment platform.",
+      "shortLabel": "ZippyCode",
+      "bullets": [
+        "Built a web-based coding assessment platform allowing users to write and test code directly in the browser, using React for the front end and Java Spring Boot for the back end.",
+        "Integrated the OpenAI API to automate coding question generation, dynamically enhancing learning content for users."
+      ],
+      "tags": ["React", "Spring Boot", "Clerk API", "MongoDB", "Tailwind CSS", "Docker", "OpenAI API"],
+      "links": [],
+      "order": 2,
+      "visible": true
+    },
+    {
+      "id": "earthquake-patterns",
+      "categoryId": "projects",
+      "title": "Statistical Analysis of Global Earthquake Patterns",
+      "summary": "Research project.",
+      "shortLabel": "Earthquakes",
+      "bullets": [
+        "Conducted a comprehensive statistical analysis of 782 global earthquakes (2001-2023) using advanced data management and visualization techniques in R.",
+        "Developed predictive insights on earthquake-tsunami relationships, identifying unidirectional causality patterns through statistical hypothesis testing."
+      ],
+      "tags": ["R", "Statistics", "Data visualization"],
+      "links": [],
+      "order": 3,
+      "visible": true
+    },
+    {
+      "id": "neural-network-backprop",
+      "categoryId": "projects",
+      "title": "Neural Network Using Backpropagation",
+      "summary": "Research project.",
+      "shortLabel": "Neural Net",
+      "bullets": [
+        "Designed and implemented a feedforward neural network from first principles in Python, coding the backpropagation algorithm without high-level ML libraries."
+      ],
+      "tags": ["Python", "Machine learning"],
+      "links": [],
+      "order": 4,
+      "visible": true
+    },
+    {
+      "id": "languages-databases",
+      "categoryId": "skills",
+      "title": "Languages & Databases",
+      "shortLabel": "Languages",
+      "icon": "code",
+      "bullets": [],
+      "tags": ["JavaScript", "TypeScript", "C/C++", "C#", "Python", "R", "PHP", "Java", "Go", "PostgreSQL", "MongoDB"],
+      "links": [],
+      "order": 1,
+      "visible": true
+    },
+    {
+      "id": "frameworks-libraries",
+      "categoryId": "skills",
+      "title": "Frameworks & Libraries",
+      "shortLabel": "Frameworks",
+      "icon": "layers",
+      "bullets": [],
+      "tags": ["React", "Node.js", "Next.js", "Express.js", "Flask", "Django", "Spring Boot", "Laravel", "FastAPI", "scikit-learn", "NumPy", "pandas", "TensorFlow", "PyTorch", "Keras", "OpenCV"],
+      "links": [],
+      "order": 2,
+      "visible": true
+    },
+    {
+      "id": "developer-tools",
+      "categoryId": "skills",
+      "title": "Developer Tools",
+      "shortLabel": "Tools",
+      "icon": "wrench",
+      "bullets": [],
+      "tags": ["Git", "Docker", "Azure", "AWS", "TravisCI", "Google Cloud Platform", "VS Code", "Visual Studio", "PyCharm", "IntelliJ", "Eclipse", "DBeaver", "Power BI", "Supabase", "Vercel"],
+      "links": [],
+      "order": 3,
+      "visible": true
+    },
+    {
+      "id": "university-of-akron",
+      "categoryId": "education",
+      "title": "Bachelor of Science in Computer Science",
+      "org": "University of Akron",
+      "shortLabel": "UAkron",
+      "summary": "B.S. in Computer Science, Minor in Statistics.",
+      "location": "Akron, OH",
+      "start": "2021-08",
+      "end": "2025-05",
+      "bullets": [],
+      "tags": ["Computer Science", "Statistics"],
+      "links": [],
+      "logoDomain": "uakron.edu",
+      "order": 1,
+      "visible": true
+    }
+  ]
+}
